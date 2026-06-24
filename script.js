@@ -129,13 +129,15 @@ if (state.winner || state.draw) {
     // Met à jour le texte dans l'interface
     msg.textContent = finalMessage;
 
-    // Déclenche l'alerte une seule fois
-if (!isGameOverAlerted) {
-    isGameOverAlerted = true;
-    setTimeout(() => {
-        showCustomAlert(finalMessage); // <-- Appelle notre jolie alerte !
-    }, 100);
-}
+if (msg) msg.textContent = finalMessage;
+
+        if (!isGameOverAlerted) {
+            isGameOverAlerted = true;
+            setTimeout(() => {
+                // On passe le message ET le code du vainqueur (state.winner vaut 1, 2 ou null s'il y a draw)
+                showCustomAlert(finalMessage, state.winner); 
+            }, 100);
+        }
     return;
 }
 
@@ -454,12 +456,23 @@ function redo() {
 }
 // ─── CUSTOM ALERT DIALOG ──────────────────────────────────────
 
-function showCustomAlert(message) {
+function showCustomAlert(message, winnerCode) {
     const overlay = document.createElement("div");
     overlay.className = "custom-alert-overlay";
 
     const box = document.createElement("div");
     box.className = "custom-alert-box";
+
+    // Détermination de la couleur selon le vainqueur
+    let themeColor = "#6c757d"; // Gris par défaut (match nul)
+    if (winnerCode === 1) {
+        themeColor = "#2e7d32"; // Vert si Joueur 1 gagne
+    } else if (winnerCode === 2) {
+        themeColor = "#d32f2f"; // Rouge si Joueur 2 gagne
+    }
+
+    // On applique la couleur via la variable CSS
+    box.style.setProperty('--alert-color', themeColor);
 
     box.innerHTML = `
         <h2>Fin de la partie</h2>
