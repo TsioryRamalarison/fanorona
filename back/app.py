@@ -16,8 +16,7 @@ position_history = []
 
 @app.route("/")
 def home():
-    return 
-render_template("index.html")
+    return render_template("index.html")
 
 @app.route("/play", methods=["POST"])
 def play():
