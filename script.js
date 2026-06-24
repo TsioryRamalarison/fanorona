@@ -24,6 +24,7 @@ let state = {
     selected: null,
     piecesPlaced: { 1: 0, 2: 0 }
 };
+let isGameOverAlerted = false;
 
 // ─── Helpers ────────────────────────────────────────────────
 
@@ -112,15 +113,30 @@ function updateUI() {
     const msg = document.getElementById("statusMsg");
 
 if (state.winner || state.draw) {
+    let finalMessage = "";
+
     if (state.draw) {
-        msg.textContent = "Match nul — répétition de position !";
+        finalMessage = "Match nul — répétition de position !";
     } else if (isAivAi()) {
         const winnerDiff = aiVsAiDifficulties[state.winner];
-        msg.textContent = `IA ${winnerDiff === "hard" ? "Difficile" : "Moyen"} a gagné !`;
+        finalMessage = `IA ${winnerDiff === "hard" ? "Difficile" : "Moyen"} a gagné !`;
     } else if (isHvH()) {
-        msg.textContent = state.winner === HUMAN ? "Joueur 1 a gagné !" : "Joueur 2 a gagné !";
+        finalMessage = state.winner === HUMAN ? "Joueur 1 a gagné !" : "Joueur 2 a gagné !";
     } else {
-        msg.textContent = state.winner === HUMAN ? "Vous avez gagné !" : "L'IA a gagné !";
+        finalMessage = state.winner === HUMAN ? "Vous avez gagné !" : "L'IA a gagné !";
+    }
+
+    // Met à jour le texte dans l'interface
+    msg.textContent = finalMessage;
+
+    // Déclenche l'alerte une seule fois
+    if (!isGameOverAlerted) {
+        isGameOverAlerted = true;
+        // Le setTimeout permet à l'interface graphique (DOM) de se mettre 
+        // à jour visuellement avant de bloquer le navigateur avec l'alerte.
+        setTimeout(() => {
+            alert(finalMessage);
+        }, 100);
     }
     return;
 }
@@ -345,6 +361,7 @@ async function handleClick(index) {
 
 async function resetGame() {
     aiVsAiRunning = false;
+    isGameOverAlerted = false; // <-- Réinitialisation ici !
     undoStack = [];
     redoStack = [];
 
