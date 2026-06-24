@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import os
 
 from board import Board
 from move_generator import apply_move
@@ -16,7 +17,9 @@ position_history = []
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    # On cible le dossier parent de "back"
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    return send_from_directory(root_dir, "index.html")
 
 @app.route("/play", methods=["POST"])
 def play():
