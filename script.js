@@ -132,14 +132,10 @@ if (state.winner || state.draw) {
     // Déclenche l'alerte une seule fois
     if (!isGameOverAlerted) {
         isGameOverAlerted = true;
-        // Le setTimeout permet à l'interface graphique (DOM) de se mettre 
-        // à jour visuellement avant de bloquer le navigateur avec l'alerte.
         setTimeout(() => {
-            alert(finalMessage);
+            showCustomAlert(finalMessage); // <-- Appelle notre jolie alerte !
         }, 100);
     }
-    return;
-}
 
     if (isAivAi()) {
         const currentDiff = aiVsAiDifficulties[state.currentPlayer];
@@ -453,4 +449,28 @@ function redo() {
     render();
     updateUI();
     updateUndoRedoButtons();
+}
+function showCustomAlert(message) {
+    // 1. Crée le fond sombre
+    const overlay = document.createElement("div");
+    overlay.className = "custom-alert-overlay";
+
+    // 2. Crée la boîte de dialogue
+    const box = document.createElement("div");
+    box.className = "custom-alert-box";
+
+    // 3. Ajoute le contenu
+    box.innerHTML = `
+        <h2>Fin de la partie</h2>
+        <p>${message}</p>
+        <button class="custom-alert-btn">OK</button>
+    `;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    // 4. Fermeture de l'alerte au clic sur le bouton
+    box.querySelector(".custom-alert-btn").addEventListener("click", () => {
+        overlay.remove();
+    });
 }
