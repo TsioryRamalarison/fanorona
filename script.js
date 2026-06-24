@@ -14,7 +14,7 @@ const POSITIONS = [
     [83.33, 83.33]
 ];
 
-const API_URL = "http://localhost:5000";
+const API_URL = "";
 
 let state = {
     board: Array(9).fill(EMPTY),
