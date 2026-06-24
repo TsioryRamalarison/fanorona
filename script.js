@@ -130,12 +130,14 @@ if (state.winner || state.draw) {
     msg.textContent = finalMessage;
 
     // Déclenche l'alerte une seule fois
-    if (!isGameOverAlerted) {
-        isGameOverAlerted = true;
-        setTimeout(() => {
-            showCustomAlert(finalMessage); // <-- Appelle notre jolie alerte !
-        }, 100);
-    }
+if (!isGameOverAlerted) {
+    isGameOverAlerted = true;
+    setTimeout(() => {
+        showCustomAlert(finalMessage); // <-- Appelle notre jolie alerte !
+    }, 100);
+}
+    return;
+}
 
     if (isAivAi()) {
         const currentDiff = aiVsAiDifficulties[state.currentPlayer];
@@ -450,16 +452,15 @@ function redo() {
     updateUI();
     updateUndoRedoButtons();
 }
+// ─── CUSTOM ALERT DIALOG ──────────────────────────────────────
+
 function showCustomAlert(message) {
-    // 1. Crée le fond sombre
     const overlay = document.createElement("div");
     overlay.className = "custom-alert-overlay";
 
-    // 2. Crée la boîte de dialogue
     const box = document.createElement("div");
     box.className = "custom-alert-box";
 
-    // 3. Ajoute le contenu
     box.innerHTML = `
         <h2>Fin de la partie</h2>
         <p>${message}</p>
@@ -469,7 +470,6 @@ function showCustomAlert(message) {
     overlay.appendChild(box);
     document.body.appendChild(overlay);
 
-    // 4. Fermeture de l'alerte au clic sur le bouton
     box.querySelector(".custom-alert-btn").addEventListener("click", () => {
         overlay.remove();
     });
