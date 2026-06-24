@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 from board import Board
@@ -14,6 +14,10 @@ CORS(app)
 # Variable globale pour tracker l'historique en mode IA vs IA
 position_history = []
 
+@app.route("/")
+def home():
+    return 
+render_template("index.html")
 
 @app.route("/play", methods=["POST"])
 def play():
